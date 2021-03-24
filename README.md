@@ -1,2 +1,2 @@
 # ft_server
-Repository of ft_server Project
+ft_server project of 42 School
