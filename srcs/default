@@ -18,14 +18,22 @@
 
 # Default server configuration
 #
+
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
+	listen 80;
+	listen [::]:80;
+	server_name _;
+	return 301 https://$host$request_uri;
+}	
+
+server {
+	#listen 80 default_server;
+	#listen [::]:80 default_server;
 
 	# SSL configuration
 	
-	listen 443 ssl default_server;
-	listen [::]:443 ssl default_server;
+	listen 443 ssl;
+	listen [::]:443 ssl;
 	ssl_certificate /etc/nginx/ssl/localhost.pem;
 	ssl_certificate_key /etc/nginx/ssl/localhost.key;
 	#
@@ -43,13 +51,14 @@ server {
 	root /var/www/html;
 
 	# Add index.php to the list if you are using PHP
-	index index.html index.htm index.nginx-debian.html;
+	index index.php index.html index.htm index.nginx-debian.html;
 
 	server_name _;
 
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
+		autoindex on;
 		try_files $uri $uri/ =404;
 	}
 
@@ -71,7 +80,6 @@ server {
 	#	deny all;
 	#}
 }
-
 
 # Virtual Host configuration for example.com
 #

@@ -11,8 +11,12 @@ RUN apt-get -y update \
 COPY srcs/default ./
 
 RUN mv default /etc/nginx/sites-available \
+    && rm /etc/nginx/sites-enabled/default \
+    && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/ \
     && mkdir /etc/nginx/ssl \
-    && openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/localhost.pem -keyout /etc/nginx/ssl/localhost.key -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=williams/CN=localhost"
+    && chmod 700 /etc/nginx/ssl \
+    && openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/localhost.pem -keyout /etc/nginx/ssl/localhost.key -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=williams/CN=localhost" \
+    && chmod 700 /etc/nginx/ssl/localhost.key \
+    && chmod 700 /etc/nginx/ssl/localhost.pem
 
-CMD sleep infinity
-
+CMD service nginx start && sleep infinity
